@@ -1,17 +1,22 @@
 Package: deffectsize
 Title: Point effect size estimates and confidence intervals
 Version: 0.0.0.9000
-Authors@R: c(
+Authors@R: 
     person(given = "Marie",
            family = "Delacre",
            role = c("aut", "cre"),
-           email = "marie.delacre@ulb.ac.be"))
-Description: Computing point effect size estimates from the d family (when comparing two means) and confidence intervals around them.
-	we compute only  unbiased estimates, i.e. Hedges' gs, Shieh's gs, Hedges' g's and Glass's gs (for more details about these unbiased
-	 effect size estimators, see https://github.com/mdelacre/Effect-sizes)
+            email = "marie.delacre@ulb.ac.be")
+Description: Computing point effect size estimates from the d family (when comparing two means) and confidence intervals around them,
+    as well as raw mean differences and confidence intervals around them. Regarding the d family, we compute only  unbiased estimates, 
+    i.e. Hedges' gs, Shieh's gs, Hedges' g's and Glass's gs (for more details about these unbiased effect size estimators, 
+    see https://github.com/mdelacre/Effect-sizes).
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9001
-
-
+RoxygenNote: 7.1.1
+BugReports: https://github.com/mdelacre/deffectsize/issues
+Suggests: 
+    testthat (>= 2.0.0)
+Config/testthat/edition: 2
+Imports: 
