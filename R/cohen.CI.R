@@ -1,4 +1,4 @@
-#' Function to compute CI around Cohen's d effect size
+#' Function to compute CI around Cohen's effect size estimators
 #'
 #' @param m1 the average score of the first group
 #' @param m2 the average score of the second group

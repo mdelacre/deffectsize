@@ -1,4 +1,4 @@
-#' Function to compute CI around Cohen's d effect size
+#' Function to compute CI around Cohen's effect size estimators
 #'
 #' @param Group.1 a (non-empty) numeric vector of data values.
 #' @param Group.2 a (non-empty) numeric vector of data values.
@@ -227,5 +227,4 @@ print.datacohen.CI <- function(x,...){
   print(round(x$CI,3))
 
 }
-
 
