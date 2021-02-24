@@ -220,10 +220,10 @@ print.datacohen.CI <- function(x,...){
   cat("Call:\n")
   print(x$call)
 
-  cat("\nRaw means difference :\n")
+  cat("\nEffect size estimate :\n")
   print(round(x$cohen.d,3))
 
-  cat(paste0("\n",x$conf.level*100," % confidence interval around the raw means difference:\n"))
+  cat(paste0("\n",x$conf.level*100," % confidence interval around effect size estimate:\n"))
   print(round(x$CI,3))
 
 }
