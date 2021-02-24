@@ -13,8 +13,6 @@
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
 #' @export meandiff.CI
-#' @S3method outliers_mcd default
-#' @S3method print outliers_mcd
 #'
 #' @keywords mean difference, confidence interval
 #' @return Returns raw mean difference, (1-alpha)% confidence interval around mean difference, standard error

@@ -10,8 +10,6 @@
 #' @param na.rm set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.
 #'
 #' @export datameandiff.CI
-#' @S3method outliers_mcd default
-#' @S3method print outliers_mcd
 #'
 #' @keywords mean difference, confidence interval
 #' @return Returns raw mean difference, (1-alpha)% confidence interval around mean difference, standard error
