@@ -202,7 +202,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
 }
 
-# Adding a default method in defining a function called datameandiff.CI.default
+# Adding a default method in defining a function called cohen.CI.default
 cohen.CI.default <- function(m1,m2,sd1,sd2,
                              n1,n2,conf.level=.95,
                              var.equal=FALSE,

@@ -196,7 +196,7 @@ datacohen.CIEst <- function(Group.1,
 
 }
 
-# Adding a default method in defining a function called datameandiff.CI.default
+# Adding a default method in defining a function called datacohen.CI.default
 datacohen.CI.default <- function(
   Group.1,
   Group.2,
