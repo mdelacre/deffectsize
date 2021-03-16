@@ -3,6 +3,7 @@
 export(cohen.CI)
 export(datacohen.CI)
 export(datameandiff.CI)
+export(datashieh.CI)
 export(meandiff.CI)
 importFrom(stats,na.omit)
 importFrom(stats,pt)

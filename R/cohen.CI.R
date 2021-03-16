@@ -13,7 +13,6 @@
 #' @param unbiased a logical variable indicating whether to compute the biased or unbiased estimator.
 #' If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bias estimator is computed (Cohen's d or Cohen's d').
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
-#' @param na.rm set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.
 #'
 #' @export cohen.CI
 #'
@@ -21,14 +20,13 @@
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-cohen.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased, alternative,na.rm) UseMethod("cohen.CI")
+cohen.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased, alternative) UseMethod("cohen.CI")
 
 cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
                         conf.level=.95,
                         var.equal=FALSE,
                         unbiased=TRUE,
-                        alternative="two.sided",
-                        na.rm=TRUE){
+                        alternative="two.sided"){
 
   param <- data.frame(m1,m2,sd1,sd2,n1,n2)
   vect <- NULL
@@ -54,13 +52,15 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
   if(var.equal==TRUE){
 
     pooled_sd <- sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(n1+n2-2))
-    t_obs <- (m1-m2)/sqrt(pooled_sd*(1/n1+1/n2))
+    t_obs <- (m1-m2)/sqrt(pooled_sd^2*(1/n1+1/n2))
     df <- n1+n2-2
     cohen.d <- (m1-m2)/pooled_sd
 
     if(unbiased==TRUE){
       corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
     } else {corr <- 1}
+
+    ES <- cohen.d*corr
 
     if(alternative=="two.sided"){
 
@@ -127,6 +127,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       corr <- gamma(v/2)/(sqrt(v/2)*gamma((v-1)/2))
     } else {corr <- 1}
 
+    ES <- cohen.d*corr
     if(alternative=="two.sided"){
 
       # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
@@ -196,7 +197,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
   # Return results in list()
   invisible(
-    list(cohen.d = cohen.d,
+    list(ES = ES,
          conf.level = conf.level,
          CI = result)
   )
@@ -208,11 +209,10 @@ cohen.CI.default <- function(m1,m2,sd1,sd2,
                              n1,n2,conf.level=.95,
                              var.equal=FALSE,
                              unbiased=TRUE,
-                             alternative="two.sided",
-                             na.rm=TRUE){
+                             alternative="two.sided"){
 
-  out <- cohen.CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased,alternative,na.rm)
-  out$cohen.d <- out$cohen.d
+  out <- cohen.CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased,alternative)
+  out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
@@ -226,7 +226,7 @@ print.cohen.CI <- function(x,...){
   print(x$call)
 
   cat("\nEffect size estimate :\n")
-  print(round(x$cohen.d,3))
+  print(round(x$ES,3))
 
   cat(paste0("\n",x$conf.level*100," % confidence interval around effect size estimate:\n"))
   print(round(x$CI,3))
