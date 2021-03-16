@@ -1,0 +1,140 @@
+#' Function to compute CI around Glass's effect size estimators
+#'
+#' @param m1 the average score of the control group
+#' @param m2 the average score of the experimental group
+#' @param sd1 the standard deviation the control group
+#' @param sd2 the standard deviation the experimental group
+#' @param n1 the sample size of the control group
+#' @param n2 the sample size of the experimental group
+#' @param conf.level confidence level of the interval
+#' @param unbiased a logical variable indicating whether to compute the biased or unbiased estimator.
+#' If TRUE, unbiased estimator is computed (Glass's g). Otherwise, bias estimator is computed (Glass's d).
+#' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
+#'
+#' @export glass.CI
+#'
+#' @keywords glass's effect sizes, confidence interval
+#' @return Returns glass's estimators of effect size and (1-alpha)% confidence interval around it, standard error
+#' @importFrom stats na.omit sd pt uniroot
+
+glass.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("glass.CI")
+
+glass.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
+                        conf.level=.95,
+                        unbiased=TRUE,
+                        alternative="two.sided"){
+
+  param <- data.frame(m1,m2,sd1,sd2,n1,n2)
+  vect <- NULL
+  for (i in seq_len(length(param))){
+    if(inherits(param[,i],c("numeric","integer"))==FALSE){
+      vect <-   c(vect,names(param[i]))
+    } else {vect=vect}
+  }
+
+  if(inherits(c(m1,m2,sd1,sd2,n1,n2),c("numeric","integer"))==FALSE){
+    if(length(vect)==1){
+      obj <- vect
+      alert="is neither numeric nor integer"
+    } else if (length(vect)>1){
+      obj <-paste(paste(vect[-length(vect)],collapse=", "),"and",vect[length(vect)])
+      alert="are neither numeric nor integer"
+    }
+
+    stop(paste(obj,alert))
+
+  }
+
+  t_obs <- ((m1-m2)/(sd1*sqrt(1/n1+sd2^2/(n2*sd1^2))))
+  df <- n1-1
+  glass.d <- (m1-m2)/sd1
+
+    if(unbiased==TRUE){
+      corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
+    } else {corr <- 1}
+
+    ES <- glass.d*corr
+
+    if(alternative=="two.sided"){
+
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
+      out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
+      lambda.1 <- out$root
+      delta.1 <- lambda.1*sqrt(1/n1+sd2^2/(n2*sd1^2))
+
+      # upper limit = limit of lambda such as pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
+      out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
+      lambda.2 <- out$root
+      delta.2 <- lambda.2*sqrt(1/n1+sd2^2/(n2*sd1^2))
+
+      result <- c(delta.1*corr, delta.2*corr)
+
+    } else if (alternative == "greater"){
+
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level) = alpha
+      f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
+      out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
+      lambda.1 <- out$root
+      delta.1 <- lambda.1*sqrt(1/n1+sd2^2/(n2*sd1^2))
+
+      # upper limit = +Inf
+      delta.2 <- +Inf
+      result <- c(delta.1*corr, delta.2)
+
+    } else if (alternative == "less"){
+
+      # lower limit = -Inf
+      delta.1 <- -Inf
+
+      # upper limit = limit of lambda such as pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level) = alpha
+      f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
+      out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
+      lambda.2 <- out$root
+      delta.2 <- lambda.2*sqrt(1/n1+sd2^2/(n2*sd1^2))
+
+      result <- c(delta.1, delta.2*corr)
+
+    }
+
+  # print results
+  meth <- "Confidence interval around the glass's estimate"
+
+  # Return results in list()
+  invisible(
+    list(ES = ES,
+         conf.level = conf.level,
+         CI = result)
+  )
+
+}
+
+# Adding a default method in defining a function called glass.CI.default
+glass.CI.default <- function(m1,m2,sd1,sd2,
+                             n1,n2,conf.level=.95,
+                             unbiased=TRUE,
+                             alternative="two.sided"){
+
+  out <- glass.CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased,alternative)
+  out$ES <- out$ES
+  out$call <- match.call()
+  out$CI <- out$CI
+  out$conf.level <- out$conf.level
+
+  class(out) <- "glass.CI"
+  out
+}
+
+print.glass.CI <- function(x,...){
+  cat("Call:\n")
+  print(x$call)
+
+  cat("\nEffect size estimate :\n")
+  print(round(x$ES,3))
+
+  cat(paste0("\n",x$conf.level*100," % confidence interval around effect size estimate:\n"))
+  print(round(x$CI,3))
+
+}
+

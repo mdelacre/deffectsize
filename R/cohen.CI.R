@@ -193,7 +193,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
   }
 
   # print results
-  meth <- "Confidence interval around the raw mean difference"
+  meth <- "Confidence interval around the cohen's estimate"
 
   # Return results in list()
   invisible(
