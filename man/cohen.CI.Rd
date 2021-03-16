@@ -2,7 +2,7 @@
 % Please edit documentation in R/cohen.CI.R
 \name{cohen.CI}
 \alias{cohen.CI}
-\title{Function to compute CI around Cohen's d effect size}
+\title{Function to compute CI around Cohen's effect size estimators}
 \usage{
 cohen.CI(
   m1,
@@ -14,8 +14,7 @@ cohen.CI(
   conf.level,
   var.equal,
   unbiased,
-  alternative,
-  na.rm
+  alternative
 )
 }
 \arguments{
@@ -41,14 +40,12 @@ average of both variance estimates is used to estimate the standard error (Cohen
 If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bias estimator is computed (Cohen's d or Cohen's d').}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".}
-
-\item{na.rm}{set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.}
 }
 \value{
 Returns Cohen's estimators of effect size and (1-alpha)\% confidence interval around it, standard error
 }
 \description{
-Function to compute CI around Cohen's d effect size
+Function to compute CI around Cohen's effect size estimators
 }
 \keyword{Cohen's}
 \keyword{confidence}

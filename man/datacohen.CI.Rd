@@ -2,7 +2,7 @@
 % Please edit documentation in R/datacohen.CI.R
 \name{datacohen.CI}
 \alias{datacohen.CI}
-\title{Function to compute CI around Cohen's d effect size}
+\title{Function to compute CI around Cohen's effect size estimators}
 \usage{
 datacohen.CI(
   Group.1,
@@ -36,7 +36,7 @@ If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bi
 Returns Cohen's estimators of effect size and (1-alpha)\% confidence interval around it, standard error
 }
 \description{
-Function to compute CI around Cohen's d effect size
+Function to compute CI around Cohen's effect size estimators
 }
 \keyword{Cohen's}
 \keyword{confidence}

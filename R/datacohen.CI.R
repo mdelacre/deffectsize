@@ -54,8 +54,7 @@ datacohen.CIEst <- function(Group.1,
     cohen.d <- (m1-m2)/pooled_sd
 
     if(unbiased==TRUE){
-      v <- ((n1-1)*(n2-1)*(sd1^2+sd2^2)^2)/((n2-1)*sd1^4+(n1-1)*sd2^4)
-      corr <- gamma(v/2)/(sqrt(v/2)*gamma((v-1)/2))
+      corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
     } else {corr <- 1}
 
     ES <- cohen.d*corr
@@ -120,7 +119,8 @@ datacohen.CIEst <- function(Group.1,
     nratio <- n1/n2
 
     if(unbiased==TRUE){
-      corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
+      v <- ((n1-1)*(n2-1)*(sd1^2+sd2^2)^2)/((n2-1)*sd1^4+(n1-1)*sd2^4)
+      corr <- gamma(v/2)/(sqrt(v/2)*gamma((v-1)/2))
     } else {corr <- 1}
 
     ES <- cohen.d*corr
