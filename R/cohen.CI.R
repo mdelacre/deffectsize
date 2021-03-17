@@ -111,45 +111,27 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
   } else if (var.equal==FALSE){
 
     cohen.d <- (m1-m2)/sqrt((sd1^2+sd2^2)/2)
-    df <- ((sd1^2/n1+sd2^2/n2)^2)/((sd1^2/n1)^2/(n1-1)+(sd2^2/n2)^2/(n2-1))
-    w_obs <- (m1-m2)/sqrt(sd1^2/n1+sd2^2/n2)
-
-    # useful parameters (related with the link between Welch's t-statistic and Cohen's d's)
-    s_bal <- sqrt((sd1^2+sd2^2)/2)
-    N <- n1+n2
-    q1 <- n1/N
-    q2 <- n2/N
-    s_unbal <- sqrt((1-q1)*sd1^2+(1-q2)*sd2^2)
-    nratio <- n1/n2
+    df <- ((n1-1)*(n2-1)*(sd1^2+sd2^2)^2)/((n2-1)*sd1^4+(n1-1)*sd2^4)
+    t_obs <- (sqrt(n1*n2)*(m1-m2))/sqrt(n2*sd1^2+n1*sd2^2)
 
     if(unbiased==TRUE){
-      v <- ((n1-1)*(n2-1)*(sd1^2+sd2^2)^2)/((n2-1)*sd1^4+(n1-1)*sd2^4)
-      corr <- gamma(v/2)/(sqrt(v/2)*gamma((v-1)/2))
+      corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
     } else {corr <- 1}
 
     ES <- cohen.d*corr
     if(alternative=="two.sided"){
 
       # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
-      f=function(lambda,rep) 1-pt(q=w_obs, df=df, ncp = lambda)-rep
+      f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1/(sqrt(N)*(s_bal*sqrt(nratio))/((nratio+1)*s_unbal))
-      # ncp_welch <- cohen.delta_prime *((sigma_bal*sqrt(nratio))/((nratio+1)*sigma_unbal))
-      # with sigma_bal <- sqrt((sigma1^2+sigma2^2)/2)
-      # and sigma_unbal <- sqrt((1-q1)*sigma1^2+(1-q2)*sigma2^2)
-      # q1 <- n1/N and q2 <- n2/N
-      # <--> cohen.delta_prime <- ncp_welch/(sqrt(N)*(sigma_bal*sqrt(nratio))/((nratio+1)*sigma_unbal))
-      # sigma1 and sigma2 are unknown, so we estimate them with sd1 and sd2.
+      delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
 
       # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-      f=function(lambda,rep) pt(q=w_obs, df=df, ncp = lambda)-rep
+      f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2/(sqrt(N)*(s_bal*sqrt(nratio))/((nratio+1)*s_unbal))
+      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
 
       result <- c(delta.1*corr, delta.2*corr)
 
@@ -158,10 +140,10 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
       # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
 
-      f=function(lambda,rep) 1-pt(q=w_obs, df=df, ncp = lambda)-rep
+      f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1/(sqrt(N)*(s_bal*sqrt(nratio))/((nratio+1)*s_unbal))
+      delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
 
       # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
       # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
@@ -180,10 +162,10 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
       # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
 
-      f=function(lambda,rep) pt(q=w_obs, df=df, ncp = lambda)-rep
+      f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2/(sqrt(N)*(s_bal*sqrt(nratio))/((nratio+1)*s_unbal))
+      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
 
       result <- c(delta.1, delta.2*corr)
 
