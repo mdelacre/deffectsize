@@ -137,4 +137,3 @@ print.glass.CI <- function(x,...){
   print(round(x$CI,3))
 
 }
-

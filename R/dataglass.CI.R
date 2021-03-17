@@ -42,7 +42,7 @@ dataglass.CIEst <- function(Group.1,
   sd1 <- sd(Group.1)
   sd2 <- sd(Group.2)
 
-    t_obs <- ((m1-m2)/(sd1*sqrt(1/n1+sd2^2/(n2*sd1^2))))
+    t_obs <- (m1-m2)/(sd1*sqrt(1/n1+sd2^2/(n2*sd1^2)))
     df <- n1-1
     glass.d <- (m1-m2)/sd1
 
@@ -136,5 +136,4 @@ print.dataglass.CI <- function(x,...){
   print(round(x$CI,3))
 
 }
-
 
