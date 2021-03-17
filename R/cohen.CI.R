@@ -75,9 +75,10 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt(1/n1+1/n2)
-      result <- c(delta.1*corr, delta.2*corr) # lambda = delta * sqrt[n1n2/(n1+n2)]
-                                              # <--> delta = lambda*sqrt(1/n1+1/n2)
+      delta.2 <- lambda.2*sqrt(1/n1+1/n2)# lambda = delta * sqrt[n1n2/(n1+n2)]
+                                         # <--> delta = lambda*sqrt(1/n1+1/n2)
+
+      result <- c(delta.1*corr, delta.2*corr)
 
     } else if (alternative == "greater"){
 
@@ -102,7 +103,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt(1/n1+1/n2) # See explenation in two.sided CI
+      delta.2 <- lambda.2*sqrt(1/n1+1/n2) # See explanation in two.sided CI
 
       result <- c(delta.1, delta.2*corr)
 
@@ -142,7 +143,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # See explenation in two.sided CI
+      delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # See explanation in two.sided CI
 
       # upper limit = +Inf
       delta.2 <- +Inf # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
@@ -160,7 +161,7 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # See explenation in two.sided CI
+      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # See explanation in two.sided CI
 
       result <- c(delta.1, delta.2*corr)
 

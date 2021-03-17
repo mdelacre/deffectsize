@@ -105,7 +105,6 @@ for (i in seq_len(length(param))){
       theo_mudiff.1 <- out$root
 
       # upper limit = +Inf
-
       theo_mudiff.2 <- Inf  # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
                             # we want to check only the lower limit of the CI
 
