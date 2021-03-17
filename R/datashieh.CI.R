@@ -52,6 +52,8 @@ datashieh.CIEst <- function(Group.1,
       corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
     } else {corr <- 1}
 
+    ES <- shieh.d*corr
+
     if(alternative=="two.sided"){
 
       # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
@@ -115,7 +117,7 @@ datashieh.CIEst <- function(Group.1,
 
   # Return results in list()
   invisible(
-    list(shieh.d = shieh.d,
+    list(ES = ES,
          conf.level = conf.level,
          CI = result)
   )
@@ -132,7 +134,7 @@ datashieh.CI.default <- function(
   na.rm=TRUE){
 
   out <- datashieh.CIEst(Group.1,Group.2,conf.level,unbiased,alternative,na.rm)
-  out$shieh.d <- out$shieh.d
+  out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
@@ -146,9 +148,10 @@ print.datacohen.CI <- function(x,...){
   print(x$call)
 
   cat("\nEffect size estimate :\n")
-  print(round(x$shieh.d,3))
+  print(round(x$ES,3))
 
   cat(paste0("\n",x$conf.level*100," % confidence interval around effect size estimate:\n"))
   print(round(x$CI,3))
 
 }
+
