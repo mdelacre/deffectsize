@@ -1,4 +1,16 @@
-res <- cohen.CI(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal=T,unbiased, alternative="two.sided")
+n1 <- 10
+n2 <- 12
+vd <- c(rnorm(n1,4,3),rnorm(n2,12,3))
+vi <- c(rep(1,n1),rep(2,n2))
+bdd <- data.frame(vi,vd)
+Group.1 <- vd[vi==1]
+Group.2 <- vd[vi==2]
+m1 <- mean(Group.1)
+m2 <- mean(Group.2)
+sd1 <- sd(Group.1)
+sd2 <- sd(Group.2)
+
+res <- cohen.CI(m1,m2,sd1,sd2,n1,n2,conf.level=.95,var.equal=T,unbiased=F, alternative="two.sided")
 
 test_that("data types correct", {
   expect_is(res,"cohen.CI")
