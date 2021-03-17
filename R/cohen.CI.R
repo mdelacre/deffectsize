@@ -64,45 +64,45 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
     if(alternative=="two.sided"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1*sqrt(1/n1+1/n2)   # See explanation for delta.2
+      delta.1 <- lambda.1*sqrt(1/n1+1/n2) # lambda = delta * sqrt[n1n2/(n1+n2)]
+                                          # <--> delta = lambda*sqrt(1/n1+1/n2)
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt(1/n1+1/n2)   # Pr[t_obs(alpha/2,df=df,ncp=lambda) <= lambda <= t_obs(1-alpha/2,df=df,ncp=lambda)=.025
-      # because lambda = delta * sqrt[n1n2/(n1+n2)] :
-      # Pr[t_obs(alpha/2,df=df,ncp=lambda) <= delta * sqrt[n1n2/(n1+n2)] <= t_obs(1-alpha/2,df=df,ncp=lambda)=.025
-      # Pr[t_obs(alpha/2,df=df,ncp=lambda)*sqrt[(n1+n2)/n1n2] <= delta <= t_obs(1-alpha/2,df=df,ncp=lambda)*sqrt[(n1+n2)/n1n2]=.025
-      # and sqrt[(n1+n2)/n1n2]=sqrt(1/n1+1/n2)
-      result <- c(delta.1*corr, delta.2*corr)
+      delta.2 <- lambda.2*sqrt(1/n1+1/n2)
+      result <- c(delta.1*corr, delta.2*corr) # lambda = delta * sqrt[n1n2/(n1+n2)]
+                                              # <--> delta = lambda*sqrt(1/n1+1/n2)
 
     } else if (alternative == "greater"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level) = alpha
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1*sqrt(1/n1+1/n2)   # See explanation for delta.2
+      delta.1 <- lambda.1*sqrt(1/n1+1/n2)   # See explanation in two.sided CI
 
       # upper limit = +Inf
       delta.2 <- +Inf
-      result <- c(delta.1*corr, delta.2)
+      result <- c(delta.1*corr, delta.2) # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
+                                         # we want to check only the lower limit of the CI
 
     } else if (alternative == "less"){
 
       # lower limit = -Inf
-      delta.1 <- -Inf
+      delta.1 <- -Inf # if our expectation is mu1 < mu2, then we expect that (mu1-mu2)< 0 and therefore
+                      # we want to check only  the upper limit of the CI
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level) = alpha
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt(1/n1+1/n2)
+      delta.2 <- lambda.2*sqrt(1/n1+1/n2) # See explenation in two.sided CI
 
       result <- c(delta.1, delta.2*corr)
 
@@ -121,51 +121,46 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
     ES <- cohen.d*corr
     if(alternative=="two.sided"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.1 <- out$root
       delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
+      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # lambda = delta * sqrt([n1n2(sd1^2+sd2^2)]/[2*(n2sd1^2+n1sd2^2)])
+                                                                              # <--> delta = lambda * sqrt([2*(n2sd1^2+n1sd2^2)]/[n1n2(sd1^2+sd2^2)])
 
       result <- c(delta.1*corr, delta.2*corr)
 
     } else if (alternative == "greater"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
+      delta.1 <- lambda.1*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # See explenation in two.sided CI
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
-      delta.2 <- +Inf
+      # upper limit = +Inf
+      delta.2 <- +Inf # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
+                      # we want to check only the lower limit of the CI
 
       result <- c(delta.1*corr, delta.2)
 
     } else if (alternative == "less"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
+      # lower limit = -Inf
+      delta.1 <- -Inf # if our expectation is mu1 < mu2, then we expect that (mu1-mu2)< 0 and therefore
+                      # we want to check only the upper limit of the CI
 
-      delta.1 <- -Inf
-
-      # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2)))
+      delta.2 <- lambda.2*sqrt((2*(n2*sd1^2+n1*sd2^2))/(n1*n2*(sd1^2+sd2^2))) # See explenation in two.sided CI
 
       result <- c(delta.1, delta.2*corr)
 

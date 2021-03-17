@@ -55,16 +55,14 @@ for (i in seq_len(length(param))){
       pooled_sd <- sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(n1+n2-2))
       SE <- pooled_sd*sqrt(1/n1+1/n2) # standard error
 
-      # Lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=n1+n2-2) = (1-conf.level)/2 = alpha/2
+      # lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=df) = (1-conf.level)/2 = alpha/2
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-
       f=function(theo_mudiff,rep) 1-pt(q=((m1-m2)-(theo_mudiff))/SE, df=n1+n2-2)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       theo_mudiff.1 <- out$root
 
-      # upper limit = limit of mu1-mu2 such as pt(q=t_obs, df=n1+n2-2) = (1-conf.level)/2 = alpha/2
+      # upper limit = limit of mu1-mu2 such aspt(q=t_obs, df=df) = (1-conf.level)/2 = alpha/2
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-
       f=function(theo_mudiff,rep) pt(q=((m1-m2)-(theo_mudiff))/SE, df=n1+n2-2)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       theo_mudiff.2 <- out$root
@@ -76,19 +74,15 @@ for (i in seq_len(length(param))){
       SE <- sqrt(sd1^2/n1+sd2^2/n2) # standard error
       DF <- ((sd1^2/n1+sd2^2/n2)^2)/((sd1^2/n1)^2/(n1-1)+(sd2^2/n2)^2/(n2-1))
 
-      # Lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=DF) = (1-conf.level)/2 = alpha/2
+      # lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=df) = (1-conf.level)/2 = alpha/2
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-      # and DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
       f=function(theo_mudiff,rep) 1-pt(q=((m1-m2)-(theo_mudiff))/SE, df=DF)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
 
       theo_mudiff.1 <- out$root
 
-      # upper limit = limit of mu1-mu2 such as pt(q=t_obs, df=DF) = (1-conf.level)/2 = alpha/2
+      # upper limit = limit of mu1-mu2 such aspt(q=t_obs, df=df) = (1-conf.level)/2 = alpha/2
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-      # and DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
       f=function(theo_mudiff,rep) pt(q=((m1-m2)-(theo_mudiff))/SE, df=DF)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       theo_mudiff.2 <- out$root
@@ -103,9 +97,8 @@ for (i in seq_len(length(param))){
       SE <- pooled_sd*sqrt(1/n1+1/n2)
 
 
-      # Lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=n1+n2-2) = (1-conf.level) = alpha
+      # Lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=df) = (1-conf.level) = alpha
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-
       f=function(theo_mudiff,rep) 1-pt(q=((m1-m2)-(theo_mudiff))/SE, df=n1+n2-2)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
 
@@ -113,7 +106,8 @@ for (i in seq_len(length(param))){
 
       # upper limit = +Inf
 
-      theo_mudiff.2 <- Inf
+      theo_mudiff.2 <- Inf  # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
+                            # we want to check only the lower limit of the CI
 
       result <- c(theo_mudiff.1, theo_mudiff.2)
 
@@ -123,15 +117,14 @@ for (i in seq_len(length(param))){
 
       # Lower limit = limit of mu1-mu2 such as 1-pt(q=t_obs, df=DF) = (1-conf.level) = alpha
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-      # and DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
       f=function(theo_mudiff,rep) 1-pt(q=((m1-m2)-(theo_mudiff))/SE, df=DF)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       theo_mudiff.1 <- out$root
 
       # Upper limit = +Inf
 
-      theo_mudiff.2 <-  Inf
+      theo_mudiff.2 <-  Inf   # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
+                              # we want to check only the lower limit of the CI
 
       result <- c(theo_mudiff.1, theo_mudiff.2)
     }
@@ -146,11 +139,11 @@ for (i in seq_len(length(param))){
 
       # Lower limit = - inf
 
-      theo_mudiff.1 <- -Inf
+      theo_mudiff.1 <- -Inf  # if our expectation is mu1 < mu2, then we expect that (mu1-mu2)< 0 and therefore
+                             # we want to check only  the upper limit of the CI
 
-      # Upper limit = limit of mu1-mu2 such as pt(q=t_obs, df=n1+n2-2) = (1-conf.level) = alpha
+      # Upper limit = limit of mu1-mu2 such as pt(q=t_obs, df=df) = (1-conf.level) = alpha
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-
       f=function(theo_mudiff,rep) pt(q=((m1-m2)-(theo_mudiff))/SE, df=n1+n2-2)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       theo_mudiff.2 <- out$root
@@ -163,12 +156,11 @@ for (i in seq_len(length(param))){
 
       # Lower limit = - inf
 
-      theo_mudiff.1 <- -Inf
+      theo_mudiff.1 <- -Inf # if our expectation is mu1 < mu2, then we expect that (mu1-mu2)< 0 and therefore
+                            # we want to check only  the upper limit of the CI
 
       # Upper limit = limit of mu1-mu2 such as pt(q=t_obs, df=DF) = (1-conf.level) = alpha
       # with t_obs = ((m1-m2)-(theo_mudiff))/SE
-      # and DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
       f=function(theo_mudiff,rep) pt(q=((m1-m2)-(theo_mudiff))/SE, df=DF)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       theo_mudiff.2 <- out$root

@@ -57,42 +57,46 @@ glass.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
     if(alternative=="two.sided"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1*sqrt(1/n1+sd2^2/(n2*sd1^2))
+      delta.1 <- lambda.1*sqrt(1/n1+sd2^2/(n2*sd1^2)) # lambda = delta/sqrt[1/n1+sd2^2/(n2*sd1)]
+                                                      # <--> delta = lambda*sqrt[1/n1+sd2^2/(n2*sd1)]
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level)/2 = alpha/2
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt(1/n1+sd2^2/(n2*sd1^2))
+      delta.2 <- lambda.2*sqrt(1/n1+sd2^2/(n2*sd1^2)) # lambda = delta/sqrt[1/n1+sd2^2/(n2*sd1)]
+                                                      # <--> delta = lambda*sqrt[1/n1+sd2^2/(n2*sd1)]
 
       result <- c(delta.1*corr, delta.2*corr)
 
     } else if (alternative == "greater"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level) = alpha
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) 1-pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1*sqrt(1/n1+sd2^2/(n2*sd1^2))
+      delta.1 <- lambda.1*sqrt(1/n1+sd2^2/(n2*sd1^2))  # See explanation in two.sided CI
 
       # upper limit = +Inf
-      delta.2 <- +Inf
+      delta.2 <- +Inf # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
+                      # we want to check only the lower limit of the CI
       result <- c(delta.1*corr, delta.2)
 
     } else if (alternative == "less"){
 
       # lower limit = -Inf
-      delta.1 <- -Inf
+      delta.1 <- -Inf # if our expectation is mu1 < mu2, then we expect that (mu1-mu2)< 0 and therefore
+                      # we want to check only the upper limit of the CI
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=n1+n2-2, ncp = lambda) = (1-conf.level) = alpha
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) pt(q=t_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2*sqrt(1/n1+sd2^2/(n2*sd1^2))
+      delta.2 <- lambda.2*sqrt(1/n1+sd2^2/(n2*sd1^2))  # See explanation in two.sided CI
 
       result <- c(delta.1, delta.2*corr)
 
@@ -137,3 +141,4 @@ print.glass.CI <- function(x,...){
   print(round(x$CI,3))
 
 }
+
