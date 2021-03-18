@@ -10,6 +10,9 @@
 #'
 #' @export dataglass.CI
 #'
+#' @exportS3Method dataglass.CI default
+#' @exportS3Method print dataglass.CI
+#'
 #' @keywords Glass's effect sizes, confidence interval
 #' @return Returns Glass's estimator of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot

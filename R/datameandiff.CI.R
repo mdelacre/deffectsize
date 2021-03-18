@@ -11,6 +11,9 @@
 #'
 #' @export datameandiff.CI
 #'
+#' @exportS3Method datameandiff.CI default
+#' @exportS3Method print datameandiff.CI
+#'
 #' @keywords mean difference, confidence interval
 #' @return Returns raw mean difference, (1-alpha)% confidence interval around mean difference, standard error
 #' @importFrom stats na.omit sd pt uniroot

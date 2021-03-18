@@ -13,6 +13,9 @@
 #'
 #' @export shieh.CI
 #'
+#' @exportS3Method shieh.CI default
+#' @exportS3Method print shieh.CI
+#'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
