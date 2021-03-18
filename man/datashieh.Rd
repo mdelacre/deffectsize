@@ -2,7 +2,7 @@
 % Please edit documentation in R/datashieh.R
 \name{datashieh}
 \alias{datashieh}
-\title{Function to compute CI around Glass's effect size estimators}
+\title{Function to compute CI around Shieh's effect size estimators}
 \usage{
 datashieh(Group.1, Group.2, conf.level, unbiased, alternative, na.rm)
 }
@@ -24,7 +24,7 @@ If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bi
 Returns Cohen's estimators of effect size and (1-alpha)\% confidence interval around it, standard error
 }
 \description{
-Function to compute CI around Glass's effect size estimators
+Function to compute CI around Shieh's effect size estimators
 }
 \keyword{Cohen's}
 \keyword{confidence}
