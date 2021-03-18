@@ -15,8 +15,7 @@
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
 #' @export cohen.CI
-#' @exportMethod cohen.CI default
-#' @exportMethod print cohen.CI
+#' @exportMethod cohen.CI
 #'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
