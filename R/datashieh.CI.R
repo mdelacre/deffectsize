@@ -56,39 +56,33 @@ datashieh.CIEst <- function(Group.1,
 
     if(alternative=="two.sided"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) 1-pt(q=w_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.1 <- out$root
-      delta.1 <- lambda.1/sqrt(N)
-      # ncp_welch <- shieh*sqrt(N)
-      # <--> shieh <- ncp_welch/sqrt(N)
+      delta.1 <- lambda.1/sqrt(N) # lambda = delta * sqrt(N)
+                                  # <--> delta = lambda/sqrt(N)
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level)/2 = alpha/2
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
       f=function(lambda,rep) pt(q=w_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=(1-conf.level)/2,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2/sqrt(N)
+      delta.2 <- lambda.2/sqrt(N) # lambda = delta * sqrt(N)
+                                  # <--> delta = lambda/sqrt(N)
 
       result <- c(delta.1*corr, delta.2*corr)
 
     } else if (alternative == "greater"){
 
-      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
+      # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) 1-pt(q=w_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.1 <- out$root
       delta.1 <- lambda.1/sqrt(N)
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
-      delta.2 <- +Inf
+      # upper limit = + Inf
+      delta.2 <- +Inf # if our expectation is mu1 > mu2, then we expect that (mu1-mu2)> 0 and therefore
+                      # we want to check only the lower limit of the CI
 
       result <- c(delta.1*corr, delta.2)
 
@@ -97,15 +91,14 @@ datashieh.CIEst <- function(Group.1,
       # lower limit = limit of lambda such as 1-pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
       # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
 
-      delta.1 <- -Inf
+      delta.1 <- -Inf # if our expectation is mu1 < mu2, then we expect that (mu1-mu2)< 0 and therefore
+                      # we want to check only the upper limit of the CI
 
-      # upper limit = limit of lambda such as pt(q=t_obs, df=DF, ncp = lambda) = (1-conf.level) = alpha
-      # with DF = (sd1^2/n1 + sd2^2/n2)^2 / ((sd1^2/n1)^2/(n1-1) + (sd2^2/n2)^2/(n2-1))
-
+      # upper limit = limit of lambda such as pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level) = alpha
       f=function(lambda,rep) pt(q=w_obs, df=df, ncp = lambda)-rep
       out=uniroot(f,c(0,2),rep=1-conf.level,extendInt = "yes")
       lambda.2 <- out$root
-      delta.2 <- lambda.2/sqrt(N)
+      delta.2 <- lambda.2/sqrt(N) # See explanation in two.sided CI
 
       result <- c(delta.1, delta.2*corr)
 

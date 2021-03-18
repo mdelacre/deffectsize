@@ -48,7 +48,7 @@ shieh.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
   N <- n1+n2
   q1 <- n1/N
   q2 <- n2/N
-    shieh.d <- (m1-m2)/sqrt(sd1^2/q1+sd2^2/q2)
+  shieh.d <- (m1-m2)/sqrt(sd1^2/q1+sd2^2/q2)
   df <- ((sd1^2/n1+sd2^2/n2)^2)/((sd1^2/n1)^2/(n1-1)+(sd2^2/n2)^2/(n2-1))
   w_obs <- (m1-m2)/sqrt(sd1^2/n1+sd2^2/n2)
 
@@ -150,32 +150,3 @@ print.datacohen.CI <- function(x,...){
   print(round(x$CI,3))
 
 }
-
-
-
-library(effectsize)
-
-n1 <- 5
-n2 <- 5
-vd <- c(rnorm(n1,4,7),rnorm(n2,8,12))
-vi <- c(rep(1,n1),rep(2,n2))
-bdd <- data.frame(vi,vd)
-
-Group.1 <- vd[vi==1]
-Group.2 <- vd[vi==2]
-m1<-mean(Group.1)
-m2<-mean(Group.2)
-sd1<-sd(Group.1)
-sd2<-sd(Group.2)
-
-effectsize::cohens_d(vd~vi,data=bdd,pooled_sd=F,method="ncp")
-
-res<-cohen.CI(m1,m2,sd1,sd2,n1,n2,conf.level=.95,var.equal=F,unbiased=F, alternative="two.sided")
-res$CI
-
-res2 <- shieh.CI(m1,m2,sd1,sd2,n1,n2,conf.level=.95,unbiased=F, alternative="two.sided")
-res2$CI
-
-
-
-res$CI/res2$CI
