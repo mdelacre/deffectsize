@@ -10,13 +10,13 @@ m2 <- mean(Group.2)
 sd1 <- sd(Group.1)
 sd2 <- sd(Group.2)
 
-res <- shieh.CI(m1,m2,sd1,sd2,n1,n2,conf.level=.95,unbiased=F, alternative="two.sided")
+res <- shieh(m1,m2,sd1,sd2,n1,n2,conf.level=.95,unbiased=F, alternative="two.sided")
 
 test_that("data types correct", {
-  expect_is(res,"shieh.CI")
+  expect_is(res,"shieh")
 })
 
-# Checking if both cohen.CI and datacohen.CI are consistent
+# Checking if both cohen and datacohen are consistent
 
 Group.1 <- rnorm(10)
 Group.2 <- rnorm(12)
@@ -32,8 +32,8 @@ n2 <- length(Group.2)
 sd1 <- sd(Group.1)
 sd2 <- sd(Group.2)
 
-res2 <- shieh.CI(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative)
-res1 <- datashieh.CI(Group.1,Group.2,conf.level,unbiased, alternative,na.rm)
+res2 <- shieh(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative)
+res1 <- datashieh(Group.1,Group.2,conf.level,unbiased, alternative,na.rm)
 
 testthat::test_that("functions are consistent",{
   expect_equal(res1$Meandiff,res2$Meandiff)
@@ -43,8 +43,8 @@ testthat::test_that("functions are consistent",{
 
 
 
-res4 <- cohen.CI(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased=T, alternative)
-res3 <- datacohen.CI(Group.1,Group.2,conf.level,var.equal,unbiased=T, alternative,na.rm)
+res4 <- cohen(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased=T, alternative)
+res3 <- datacohen(Group.1,Group.2,conf.level,var.equal,unbiased=T, alternative,na.rm)
 
 testthat::test_that("functions are consistent",{
   expect_equal(res1$Meandiff,res2$Meandiff)
