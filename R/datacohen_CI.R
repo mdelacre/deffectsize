@@ -11,18 +11,18 @@
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #' @param na.rm set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.
 #'
-#' @export datacohen
+#' @export datacohen_CI
 #'
-#' @exportS3Method datacohen default
-#' @exportS3Method print datacohen
+#' @exportS3Method datacohen_CI default
+#' @exportS3Method print datacohen_CI
 #'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-datacohen <- function(Group.1,Group.2,conf.level,var.equal,unbiased, alternative,na.rm) UseMethod("datacohen")
+datacohen_CI <- function(Group.1,Group.2,conf.level,var.equal,unbiased, alternative,na.rm) UseMethod("datacohen_CI")
 
-datacohenEst <- function(Group.1,
+datacohen_CIEst <- function(Group.1,
                                Group.2,
                                conf.level=.95,
                                var.equal=FALSE,
@@ -184,8 +184,8 @@ datacohenEst <- function(Group.1,
 
 }
 
-# Adding a default method in defining a function called datacohen.default
-datacohen.default <- function(
+# Adding a default method in defining a function called datacohen_CI.default
+datacohen_CI.default <- function(
   Group.1,
   Group.2,
   conf.level=.95,
@@ -194,17 +194,17 @@ datacohen.default <- function(
   alternative="two.sided",
   na.rm=TRUE){
 
-  out <- datacohenEst(Group.1,Group.2,conf.level,var.equal,unbiased,alternative,na.rm)
+  out <- datacohen_CIEst(Group.1,Group.2,conf.level,var.equal,unbiased,alternative,na.rm)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "datacohen"
+  class(out) <- "datacohen_CI"
   out
 }
 
-print.datacohen <- function(x,...){
+print.datacohen_CI <- function(x,...){
   cat("Call:\n")
   print(x$call)
 

@@ -12,18 +12,18 @@
 #' unpooled variance.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
-#' @export meandiff
+#' @export meandiff_CI
 #'
-#' @exportS3Method meandiff default
-#' @exportS3Method print meandiff
+#' @exportS3Method meandiff_CI default
+#' @exportS3Method print meandiff_CI
 #'
 #' @keywords mean difference, confidence interval
 #' @return Returns raw mean difference, (1-alpha)% confidence interval around mean difference, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-meandiff <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative) UseMethod("meandiff")
+meandiff_CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative) UseMethod("meandiff_CI")
 
-meandiffEst <- function(m1,m2,sd1,sd2,
+meandiff_CIEst <- function(m1,m2,sd1,sd2,
                             n1,n2,conf.level=.95,
                             var.equal=FALSE,
                            alternative="two.sided"){
@@ -177,7 +177,7 @@ for (i in seq_len(length(param))){
 
   # Return results in list()
   invisible(
-    list(Meandiff = m1-m2,
+    list(meandiff_CI = m1-m2,
          conf.level = conf.level,
          Std.error = SE,
          CI = result)
@@ -185,30 +185,30 @@ for (i in seq_len(length(param))){
 
 }
 
-# Adding a default method in defining a function called meandiff.default
+# Adding a default method in defining a function called meandiff_CI.default
 
-meandiff.default <- function(m1,m2,sd1,sd2,
+meandiff_CI.default <- function(m1,m2,sd1,sd2,
                            n1,n2,conf.level=.95,
                            var.equal=FALSE,
                            alternative="two.sided"){
 
-  out <- meandiffEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative)
-  out$Meandiff <- out$Meandiff
+  out <- meandiff_CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative)
+  out$meandiff_CI <- out$meandiff_CI
   out$std.error <- out$std.error
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "meandiff"
+  class(out) <- "meandiff_CI"
   out
 }
 
-print.meandiff <- function(x,...){
+print.meandiff_CI <- function(x,...){
   cat("Call:\n")
   print(x$call)
 
   cat("\nRaw means difference :\n")
-  print(round(x$Meandiff,3))
+  print(round(x$meandiff_CI,3))
 
   cat(paste0("\n",x$conf.level*100," % confidence interval around the raw means difference:\n"))
   print(round(x$CI,3))

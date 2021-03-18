@@ -1,4 +1,4 @@
-#' Function to compute CI around Shieh's effect size estimators
+#' Function to compute CI around shieh's effect size estimators
 #'
 #' @param m1 the average score of the first group
 #' @param m2 the average score of the second group
@@ -11,18 +11,18 @@
 #' If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bias estimator is computed (Cohen's d or Cohen's d').
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
-#' @export shieh
+#' @export shieh_CI
 #'
-#' @exportS3Method shieh default
-#' @exportS3Method print shieh
+#' @exportS3Method shieh_CI default
+#' @exportS3Method print shieh_CI
 #'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-shieh <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("shieh")
+shieh_CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("shieh_CI")
 
-shiehEst <- function(m1,m2,sd1,sd2,n1,n2,
+shieh_CIEst <- function(m1,m2,sd1,sd2,n1,n2,
                             conf.level=.95,
                             unbiased=TRUE,
                             alternative="two.sided"){
@@ -124,25 +124,25 @@ shiehEst <- function(m1,m2,sd1,sd2,n1,n2,
 
 }
 
-# Adding a default method in defining a function called shieh.default
-shieh.default <- function(
+# Adding a default method in defining a function called shieh_CI.default
+shieh_CI.default <- function(
   m1,m2,sd1,sd2,n1,n2,
   conf.level=.95,
   unbiased=TRUE,
   alternative="two.sided"){
 
-  out <- shiehEst(m1,m2,sd1,sd2,n1,n2,
+  out <- shieh_CIEst(m1,m2,sd1,sd2,n1,n2,
                      conf.level,unbiased,alternative)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "shieh"
+  class(out) <- "shieh_CI"
   out
 }
 
-print.shieh <- function(x,...){
+print.shieh_CI <- function(x,...){
   cat("Call:\n")
   print(x$call)
 
