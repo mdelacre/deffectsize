@@ -1,4 +1,4 @@
-#' Function to compute CI around Glass's effect size estimators
+#' Function to compute CI around Shieh's effect size estimators
 #'
 #' @param m1 the average score of the first group
 #' @param m2 the average score of the second group
