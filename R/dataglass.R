@@ -8,18 +8,18 @@
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #' @param na.rm set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.
 #'
-#' @export dataglass.CI
+#' @export dataglass
 #'
-#' @exportS3Method dataglass.CI default
-#' @exportS3Method print dataglass.CI
+#' @exportS3Method dataglass default
+#' @exportS3Method print dataglass
 #'
 #' @keywords Glass's effect sizes, confidence interval
 #' @return Returns Glass's estimator of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-dataglass.CI <- function(Group.1,Group.2,conf.level,unbiased, alternative,na.rm) UseMethod("dataglass.CI")
+dataglass <- function(Group.1,Group.2,conf.level,unbiased, alternative,na.rm) UseMethod("dataglass")
 
-dataglass.CIEst <- function(Group.1,
+dataglassEst <- function(Group.1,
                                Group.2,
                                conf.level=.95,
                                unbiased=TRUE,
@@ -114,8 +114,8 @@ dataglass.CIEst <- function(Group.1,
 
 }
 
-# Adding a default method in defining a function called dataglass.CI.default
-dataglass.CI.default <- function(
+# Adding a default method in defining a function called dataglass.default
+dataglass.default <- function(
   Group.1,
   Group.2,
   conf.level=.95,
@@ -123,17 +123,17 @@ dataglass.CI.default <- function(
   alternative="two.sided",
   na.rm=TRUE){
 
-  out <- dataglass.CIEst(Group.1,Group.2,conf.level,unbiased,alternative,na.rm)
+  out <- dataglassEst(Group.1,Group.2,conf.level,unbiased,alternative,na.rm)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "dataglass.CI"
+  class(out) <- "dataglass"
   out
 }
 
-print.dataglass.CI <- function(x,...){
+print.dataglass <- function(x,...){
   cat("Call:\n")
   print(x$call)
 

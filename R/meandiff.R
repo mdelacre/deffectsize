@@ -12,18 +12,18 @@
 #' unpooled variance.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
-#' @export meandiff.CI
+#' @export meandiff
 #'
-#' @exportS3Method meandiff.CI default
-#' @exportS3Method print meandiff.CI
+#' @exportS3Method meandiff default
+#' @exportS3Method print meandiff
 #'
 #' @keywords mean difference, confidence interval
 #' @return Returns raw mean difference, (1-alpha)% confidence interval around mean difference, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-meandiff.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative) UseMethod("meandiff.CI")
+meandiff <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative) UseMethod("meandiff")
 
-meandiff.CIEst <- function(m1,m2,sd1,sd2,
+meandiffEst <- function(m1,m2,sd1,sd2,
                             n1,n2,conf.level=.95,
                             var.equal=FALSE,
                            alternative="two.sided"){
@@ -185,25 +185,25 @@ for (i in seq_len(length(param))){
 
 }
 
-# Adding a default method in defining a function called meandiff.CI.default
+# Adding a default method in defining a function called meandiff.default
 
-meandiff.CI.default <- function(m1,m2,sd1,sd2,
+meandiff.default <- function(m1,m2,sd1,sd2,
                            n1,n2,conf.level=.95,
                            var.equal=FALSE,
                            alternative="two.sided"){
 
-  out <- meandiff.CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative)
+  out <- meandiffEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative)
   out$Meandiff <- out$Meandiff
   out$std.error <- out$std.error
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "meandiff.CI"
+  class(out) <- "meandiff"
   out
 }
 
-print.meandiff.CI <- function(x,...){
+print.meandiff <- function(x,...){
   cat("Call:\n")
   print(x$call)
 

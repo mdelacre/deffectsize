@@ -8,18 +8,18 @@
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #' @param na.rm set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.
 #'
-#' @export datashieh.CI
+#' @export datashieh
 #'
-#' @exportS3Method datashieh.CI default
-#' @exportS3Method print datashieh.CI
+#' @exportS3Method datashieh default
+#' @exportS3Method print datashieh
 #'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-datashieh.CI <- function(Group.1,Group.2,conf.level,unbiased, alternative,na.rm) UseMethod("datashieh.CI")
+datashieh <- function(Group.1,Group.2,conf.level,unbiased, alternative,na.rm) UseMethod("datashieh")
 
-datashieh.CIEst <- function(Group.1,
+datashiehEst <- function(Group.1,
                             Group.2,
                             conf.level=.95,
                             unbiased=TRUE,
@@ -120,8 +120,8 @@ datashieh.CIEst <- function(Group.1,
 
 }
 
-# Adding a default method in defining a function called datashieh.CI.default
-datashieh.CI.default <- function(
+# Adding a default method in defining a function called datashieh.default
+datashieh.default <- function(
   Group.1,
   Group.2,
   conf.level=.95,
@@ -129,17 +129,17 @@ datashieh.CI.default <- function(
   alternative="two.sided",
   na.rm=TRUE){
 
-  out <- datashieh.CIEst(Group.1,Group.2,conf.level,unbiased,alternative,na.rm)
+  out <- datashiehEst(Group.1,Group.2,conf.level,unbiased,alternative,na.rm)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "datashieh.CI"
+  class(out) <- "datashieh"
   out
 }
 
-print.datashieh.CI <- function(x,...){
+print.datashieh <- function(x,...){
   cat("Call:\n")
   print(x$call)
 

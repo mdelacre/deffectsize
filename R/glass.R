@@ -11,18 +11,18 @@
 #' If TRUE, unbiased estimator is computed (Glass's g). Otherwise, bias estimator is computed (Glass's d).
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
-#' @export glass.CI
+#' @export glass
 #'
-#' @exportS3Method glass.CI default
-#' @exportS3Method print glass.CI
+#' @exportS3Method glass default
+#' @exportS3Method print glass
 #'
 #' @keywords glass's effect sizes, confidence interval
 #' @return Returns glass's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-glass.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("glass.CI")
+glass <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("glass")
 
-glass.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
+glassEst <- function(m1,m2,sd1,sd2,n1,n2,
                         conf.level=.95,
                         unbiased=TRUE,
                         alternative="two.sided"){
@@ -117,23 +117,23 @@ glass.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
 }
 
-# Adding a default method in defining a function called glass.CI.default
-glass.CI.default <- function(m1,m2,sd1,sd2,
+# Adding a default method in defining a function called glass.default
+glass.default <- function(m1,m2,sd1,sd2,
                              n1,n2,conf.level=.95,
                              unbiased=TRUE,
                              alternative="two.sided"){
 
-  out <- glass.CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased,alternative)
+  out <- glassEst(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased,alternative)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "glass.CI"
+  class(out) <- "glass"
   out
 }
 
-print.glass.CI <- function(x,...){
+print.glass <- function(x,...){
   cat("Call:\n")
   print(x$call)
 

@@ -11,18 +11,18 @@
 #' If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bias estimator is computed (Cohen's d or Cohen's d').
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
-#' @export shieh.CI
+#' @export shieh
 #'
-#' @exportS3Method shieh.CI default
-#' @exportS3Method print shieh.CI
+#' @exportS3Method shieh default
+#' @exportS3Method print shieh
 #'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-shieh.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("shieh.CI")
+shieh <- function(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative) UseMethod("shieh")
 
-shieh.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
+shiehEst <- function(m1,m2,sd1,sd2,n1,n2,
                             conf.level=.95,
                             unbiased=TRUE,
                             alternative="two.sided"){
@@ -124,25 +124,25 @@ shieh.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
 }
 
-# Adding a default method in defining a function called shieh.CI.default
-shieh.CI.default <- function(
+# Adding a default method in defining a function called shieh.default
+shieh.default <- function(
   m1,m2,sd1,sd2,n1,n2,
   conf.level=.95,
   unbiased=TRUE,
   alternative="two.sided"){
 
-  out <- shieh.CIEst(m1,m2,sd1,sd2,n1,n2,
+  out <- shiehEst(m1,m2,sd1,sd2,n1,n2,
                      conf.level,unbiased,alternative)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "shieh.CI"
+  class(out) <- "shieh"
   out
 }
 
-print.shieh.CI <- function(x,...){
+print.shieh <- function(x,...){
   cat("Call:\n")
   print(x$call)
 

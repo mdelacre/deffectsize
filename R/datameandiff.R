@@ -9,18 +9,18 @@
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #' @param na.rm set whether Missing Values should be excluded (na.rm = TRUE) or not (na.rm = FALSE) - defaults to TRUE.
 #'
-#' @export datameandiff.CI
+#' @export datameandiff
 #'
-#' @exportS3Method datameandiff.CI default
-#' @exportS3Method print datameandiff.CI
+#' @exportS3Method datameandiff default
+#' @exportS3Method print datameandiff
 #'
 #' @keywords mean difference, confidence interval
 #' @return Returns raw mean difference, (1-alpha)% confidence interval around mean difference, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-datameandiff.CI <- function(Group.1,Group.2,conf.level,var.equal,alternative,na.rm) UseMethod("datameandiff.CI")
+datameandiff <- function(Group.1,Group.2,conf.level,var.equal,alternative,na.rm) UseMethod("datameandiff")
 
-datameandiff.CIEst <- function(Group.1,
+datameandiffEst <- function(Group.1,
                             Group.2,
                             conf.level=.95,
                             var.equal=FALSE,
@@ -176,8 +176,8 @@ datameandiff.CIEst <- function(Group.1,
 
 }
 
-# Adding a default method in defining a function called datameandiff.CI.default
-datameandiff.CI.default <- function(
+# Adding a default method in defining a function called datameandiff.default
+datameandiff.default <- function(
            Group.1,
            Group.2,
            conf.level=.95,
@@ -185,18 +185,18 @@ datameandiff.CI.default <- function(
            alternative="two.sided",
            na.rm=TRUE){
 
-  out <- datameandiff.CIEst(Group.1,Group.2,conf.level,var.equal,alternative,na.rm)
+  out <- datameandiffEst(Group.1,Group.2,conf.level,var.equal,alternative,na.rm)
   out$Meandiff <- out$Meandiff
   out$std.error <- out$std.error
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "datameandiff.CI"
+  class(out) <- "datameandiff"
   out
 }
 
-print.datameandiff.CI <- function(x,...){
+print.datameandiff <- function(x,...){
   cat("Call:\n")
   print(x$call)
 
