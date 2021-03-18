@@ -1,4 +1,4 @@
-#' Function to compute CI around Glass's effect size estimators
+#' Function to compute CI around Shieh's effect size estimators
 #'
 #' @param Group.1 a (non-empty) numeric vector of data values.
 #' @param Group.2 a (non-empty) numeric vector of data values.
