@@ -14,18 +14,18 @@
 #' If TRUE, unbiased estimator is computed (Hedges' g or Hedges' g'). Otherwise, bias estimator is computed (Cohen's d or Cohen's d').
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less".
 #'
-#' @export cohen.CI
+#' @export cohen_CI
 #'
-#' @exportS3Method cohen.CI default
-#' @exportS3Method print cohen.CI
+#' @exportS3Method cohen_CI default
+#' @exportS3Method print cohen_CI
 #'
 #' @keywords Cohen's effect sizes, confidence interval
 #' @return Returns Cohen's estimators of effect size and (1-alpha)% confidence interval around it, standard error
 #' @importFrom stats na.omit sd pt uniroot
 
-cohen.CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased, alternative) UseMethod("cohen.CI")
+cohen_CI <- function(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased, alternative) UseMethod("cohen_CI")
 
-cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
+cohen_CIEst <- function(m1,m2,sd1,sd2,n1,n2,
                         conf.level=.95,
                         var.equal=FALSE,
                         unbiased=TRUE,
@@ -185,24 +185,24 @@ cohen.CIEst <- function(m1,m2,sd1,sd2,n1,n2,
 
 }
 
-# Adding a default method in defining a function called cohen.CI.default
-cohen.CI.default <- function(m1,m2,sd1,sd2,
+# Adding a default method in defining a function called cohen_CI.default
+cohen_CI.default <- function(m1,m2,sd1,sd2,
                              n1,n2,conf.level=.95,
                              var.equal=FALSE,
                              unbiased=TRUE,
                              alternative="two.sided"){
 
-  out <- cohen.CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased,alternative)
+  out <- cohen_CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased,alternative)
   out$ES <- out$ES
   out$call <- match.call()
   out$CI <- out$CI
   out$conf.level <- out$conf.level
 
-  class(out) <- "cohen.CI"
+  class(out) <- "cohen_CI"
   out
 }
 
-print.cohen.CI <- function(x,...){
+print.cohen_CI <- function(x,...){
   cat("Call:\n")
   print(x$call)
 
