@@ -177,7 +177,7 @@ for (i in seq_len(length(param))){
 
   # Return results in list()
   invisible(
-    list(meandiff_CI = m1-m2,
+    list(meandiff = m1-m2,
          conf.level = conf.level,
          Std.error = SE,
          CI = result)
@@ -193,7 +193,7 @@ meandiff_CI.default <- function(m1,m2,sd1,sd2,
                            alternative="two.sided"){
 
   out <- meandiff_CIEst(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative)
-  out$meandiff_CI <- out$meandiff_CI
+  out$meandiff <- out$meandiff
   out$std.error <- out$std.error
   out$call <- match.call()
   out$CI <- out$CI
@@ -208,7 +208,7 @@ print.meandiff_CI <- function(x,...){
   print(x$call)
 
   cat("\nRaw means difference :\n")
-  print(round(x$meandiff_CI,3))
+  print(round(x$meandiff,3))
 
   cat(paste0("\n",x$conf.level*100," % confidence interval around the raw means difference:\n"))
   print(round(x$CI,3))

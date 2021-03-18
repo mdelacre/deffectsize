@@ -10,15 +10,13 @@ m2 <- mean(Group.2)
 sd1 <- sd(Group.1)
 sd2 <- sd(Group.2)
 
-
-res <- glass(m1,m2,sd1,sd2,n1,n2,conf.level=.90,unbiased=T,alternative="two.sided")
+res <- shieh_CI(m1,m2,sd1,sd2,n1,n2,conf.level=.95,unbiased=F, alternative="two.sided")
 
 test_that("data types correct", {
-  expect_is(res,"glass")
-
+  expect_is(res,"shieh_CI")
 })
 
-# Checking if both glass and dataglass are consistent
+# Checking if both cohen and datacohen are consistent
 
 Group.1 <- rnorm(10)
 Group.2 <- rnorm(12)
@@ -34,8 +32,8 @@ n2 <- length(Group.2)
 sd1 <- sd(Group.1)
 sd2 <- sd(Group.2)
 
-res2 <- glass(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased=F, alternative)
-res1 <- dataglass(Group.1,Group.2,conf.level,unbiased=F, alternative,na.rm)
+res2 <- shieh_CI(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased, alternative)
+res1 <- datashieh_CI(Group.1,Group.2,conf.level,unbiased, alternative,na.rm)
 
 testthat::test_that("functions are consistent",{
   expect_equal(res1$Meandiff,res2$Meandiff)
@@ -45,14 +43,11 @@ testthat::test_that("functions are consistent",{
 
 
 
-res4 <- glass(m1,m2,sd1,sd2,n1,n2,conf.level,unbiased=T, alternative)
-res3 <- dataglass(Group.1,Group.2,conf.level,unbiased=T, alternative,na.rm)
+res4 <- cohen(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,unbiased=T, alternative)
+res3 <- datacohen(Group.1,Group.2,conf.level,var.equal,unbiased=T, alternative,na.rm)
 
 testthat::test_that("functions are consistent",{
-  expect_equal(res4$Meandiff,res3$Meandiff)
-  expect_equal(res4$Std.error,res3$Std.error)
-  expect_equal(res4$CI,res3$CI)
+  expect_equal(res1$Meandiff,res2$Meandiff)
+  expect_equal(res1$Std.error,res2$Std.error)
+  expect_equal(res1$CI,res2$CI)
 })
-
-
-
