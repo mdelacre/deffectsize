@@ -142,7 +142,7 @@ shieh.CI.default <- function(
   out
 }
 
-print.datacohen.CI <- function(x,...){
+print.shieh.CI <- function(x,...){
   cat("Call:\n")
   print(x$call)
 
