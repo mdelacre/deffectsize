@@ -215,6 +215,15 @@ print.meandiff_CI <- function(x,...){
 
 }
 
-
+m1=1
+m2=0
+sd1=2
+sd2=2
+n1=20
+n2=30
+conf.level=.95
+var.equal=T
+alternative="two.sided"
+meandiff_CI(m1,m2,sd1,sd2,n1,n2,conf.level,var.equal,alternative) UseMethod("meandiff_CI")
 
 

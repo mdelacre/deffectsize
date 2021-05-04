@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Marie",
            family = "Delacre",
            role = c("aut", "cre"),
-            email = "marie.delacre@ulb.ac.be")
+            email = "marie.delacre@ulb.be")
 Description: Computing point effect size estimates from the d family (when comparing two means) and confidence intervals around them,
     as well as raw mean differences and confidence intervals around them. Regarding the d family, we compute only  unbiased estimates, 
     i.e. Hedges' gs, Shieh's gs, Hedges' g's and Glass's gs (for more details about these unbiased effect size estimators, 
