@@ -59,8 +59,10 @@ shieh_CIEst <- function(m1,m2,sd1,sd2,n1,n2,
     corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
   } else {corr <- 1}
 
-  ES <- shieh.d*corr
-
+  if(corr=="NaN"){
+    alert2="Correction for bias is only for small sample sizes. Use 'unbiased=FALSE'"
+    stop(alert2)
+  } else {ES <- shieh.d*corr}
 
   if(alternative=="two.sided"){
 

@@ -60,7 +60,10 @@ datacohen_CIEst <- function(Group.1,
       corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
     } else {corr <- 1}
 
-    ES <- cohen.d*corr
+    if(corr=="NaN"){
+      alert2="Correction for bias is only for small sample sizes. Use 'unbiased=FALSE'"
+      stop(alert2)
+    } else {ES <- cohen.d*corr}
 
     if(alternative=="two.sided"){
 
@@ -121,7 +124,11 @@ datacohen_CIEst <- function(Group.1,
       corr <- gamma(df/2)/(sqrt(df/2)*gamma((df-1)/2))
     } else {corr <- 1}
 
-    ES <- cohen.d*corr
+    if(corr=="NaN"){
+      alert2="Correction for bias is only for small sample sizes. Use 'unbiased=FALSE'"
+      stop(alert2)
+    } else {ES <- cohen.d*corr}
+
     if(alternative=="two.sided"){
 
       # lower limit = limit of lambda such as 1-pt(q=t_obs, df=df, ncp = lambda) = (1-conf.level)/2 = alpha/2
